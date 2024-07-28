@@ -1,0 +1,47 @@
+services:
+  web:
+    build: ./crud-app
+    ports:
+      - "83-84:3000"
+    deploy:
+      replicas: 2
+    volumes:
+      - type: bind
+        source: /home/tung_ngt/Sites/docker-tutorial/nodejs-sample-crud-app/crud-app/src
+        target: /app/src
+  db:
+    image: mariadb
+    restart: always
+    user: root
+    secrets:
+      - db-password
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      - MARIADB_ROOT_PASSWORD_FILE=/run/secrets/db-password
+      - MARIADB_DATABASE=example
+    expose:
+      - 3306
+    healthcheck:
+      test:  ["CMD", "/usr/local/bin/healthcheck.sh", "--su-mysql", "--connect",  "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - 82:80
+    depends_on:
+      - db
+  proxy:
+    build: ./nginx 
+    ports:
+    - "9000:9000"
+    depends_on:
+    - web
+volumes:
+  db-data:
+secrets:
+  db-password:
+    file: db/password.txt
+  
