@@ -1,6 +1,8 @@
 pipeline {
     agent {
-        label 'linux'
+        cloud {
+            label 'linux'
+        }
     }
     stages {
         stage('Build') {
