@@ -7,14 +7,14 @@ pipeline {
                 sh 'docker-compose up -d'
             }
         }
-        stage('Test') {
-            steps {
-            }
-        }
-        stage('Deliver') { 
-            steps {
+        // stage('Test') {
+        //     steps {
+        //     }
+        // }
+        // stage('Deliver') { 
+        //     steps {
                
-            }
-        }
+        //     }
+        // }
     }
 }
